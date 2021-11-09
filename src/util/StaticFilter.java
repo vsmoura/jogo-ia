@@ -2,7 +2,7 @@ package util;
 
 public class StaticFilter {
 
-    public static final String JOGO_UNIMED_FOTALEZA = "Jogo Unimed Fortaleza";
+    public static final String JOGO_INTELIGENCIA_ARTIFICIAL = "Jogo Inteligencia Artificial";
     public static final String CONFIRM = "Confirm";
     public static final String DESISTO = "Desisto";
     public static final String COMPLETE = "Complete";
