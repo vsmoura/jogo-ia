@@ -1,86 +1,104 @@
 package service;
 
-import entity.Prato;
-import util.StaticFilter;
+import entity.Refeicao;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static javax.swing.JOptionPane.*;
+import static service.DialogService.*;
+import static util.StaticFilter.*;
 
 public class ProgramService {
 
-    private static Object[] optionsContinue = {"Continue", "Sair"};
+    public static void program(List<Refeicao> refeicaoPrincipal, List<Refeicao> sobremessa) {
 
-    public static void program(Frame frame, Object[] options, java.util.List<Prato> pratosSalgados, java.util.List<Prato> pratosDoces) {
-        JOptionPane.showConfirmDialog(frame, StaticFilter.PRATO_QUE_GOSTA, StaticFilter.JOGO_INTELIGENCIA_ARTIFICIAL, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+        dialogPenseNoPratoQueGosta();
 
-        int massa = JOptionPane.showOptionDialog(frame, StaticFilter.PRATO_MASSA, StaticFilter.CONFIRM, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int reposta = dialogIsRefeicaoPrincipalMassa();
 
-        if (massa == JOptionPane.YES_NO_OPTION) {
-            fluxoPerguntas(frame, options, pratosSalgados, StaticFilter.PRATO_MASSA, StaticFilter.PRATO_LASANHA, JOptionPane.YES_NO_OPTION);
+        if (reposta == YES_NO_OPTION) {
+            fluxoDePerguntas(refeicaoPrincipal,
+                    REFEICAO_E_MASSA,
+                    REFEICAO_LASANHA,
+                    YES_NO_OPTION
+            );
         } else {
-            fluxoPerguntas(frame, options, pratosDoces, StaticFilter.PRATO_BOLO_DE_CHOCOLATE, StaticFilter.PRATO_BOLO_DE_CHOCOLATE, JOptionPane.DEFAULT_OPTION);
+            fluxoDePerguntas(sobremessa,
+                    REFEICAO_E_BOLO_DE_CHOCOLATE,
+                    REFEICAO_E_BOLO_DE_CHOCOLATE,
+                    DEFAULT_OPTION
+            );
         }
     }
 
-    private static void fluxoPerguntas(Frame frame, Object[] options, java.util.List<Prato> pratos, String tipoPrato, String pratoInicial, int yesNoOption) {
-        if (pratos.size() > 0) {
-            boolean voltarInicio = logicaIA(frame, options, pratos, tipoPrato);
+    private static void fluxoDePerguntas(List<Refeicao> refeicoes, String tipoReceicao, String refeicaoInicial, int yesNoOption) {
+        if (refeicoes.size() > 0) {
+            boolean voltarInicio = logicaInteligenciaArtificial(refeicoes, tipoReceicao);
             if (voltarInicio) {
                 return;
             }
         }
 
-        int resposta = JOptionPane.showOptionDialog(frame, pratoInicial, StaticFilter.CONFIRM, yesNoOption, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int resposta = dialogAcertouDePrimeira(refeicaoInicial, yesNoOption);
 
-        if (resposta == JOptionPane.YES_NO_OPTION) {
-            acerteiDeNovo(frame, optionsContinue);
+        AcerteiOuAdicionarNovaRefeicao(refeicoes, tipoReceicao, resposta);
+    }
+
+    private static void AcerteiOuAdicionarNovaRefeicao(List<Refeicao> refeicoes, String tipoReceicao, int resposta) {
+        if (resposta == YES_NO_OPTION) {
+            acerteiDeNovo();
         } else {
-            adicionarNovoPrato(frame, pratos, tipoPrato);
+            adicionarNovaRefeicao(refeicoes, tipoReceicao);
         }
     }
 
-    private static boolean logicaIA(Frame frame, Object[] options, java.util.List<Prato> pratos, String filter) {
-        java.util.List<Prato> pratoList = new ArrayList<>();
+    private static boolean logicaInteligenciaArtificial(List<Refeicao> refeicaos, String tipoRefeicao) {
+        List<Refeicao> refeicaoList = new ArrayList<>();
         boolean voltarInicio = false;
-        for (Prato listaPratos : pratos) {
-            int resposta = JOptionPane.showOptionDialog(frame, StaticFilter.PRATO_QUE_PENSOU + listaPratos.getAdjetivo(), StaticFilter.CONFIRM, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            if (resposta == JOptionPane.YES_NO_OPTION) {
-                int eEsse = JOptionPane.showOptionDialog(frame, StaticFilter.PRATO_QUE_PENSOU + listaPratos.getNome(), StaticFilter.CONFIRM, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                if (eEsse == JOptionPane.YES_NO_OPTION) {
-                    acerteiDeNovo(frame, optionsContinue);
-                } else {
-                    adicionarNovoPrato(frame, pratoList, filter);
-                }
+
+        for (Refeicao listaPratos : refeicaos) {
+
+            int resposta = dialogAcerteiARefeicaoComOAdjetivo(listaPratos);
+
+            if (resposta == YES_NO_OPTION) {
+                int eEsse = dialogAcerteiARefeicaoComONome(listaPratos);
+                AcerteiOuAdicionarNovaRefeicao(refeicaoList, tipoRefeicao, eEsse);
                 voltarInicio = true;
             }
         }
-        pratos.addAll(pratoList);
+
+        refeicaos.addAll(refeicaoList);
         return voltarInicio;
     }
 
-    private static void acerteiDeNovo(Frame frame, Object[] optionsContinue) {
-        int resposta = JOptionPane.showOptionDialog(frame, StaticFilter.ACERTEI, StaticFilter.JOGO_GOURMET, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsContinue, optionsContinue[0]);
-        if (resposta == JOptionPane.NO_OPTION){
-            System.exit(0);
-        }
-    }
+    private static void adicionarNovaRefeicao(List<Refeicao> refeicaos, String tipoRefeicao) {
+        String nome = dialogQualOPratoQueVocePensou();
 
-    private static void adicionarNovoPrato(Frame frame, List<Prato> pratos, String filter) {
-        String nome = JOptionPane.showInputDialog(frame, StaticFilter.QUAL_PRATO_QUE_PENSOU, StaticFilter.DESISTO, JOptionPane.QUESTION_MESSAGE);
         if (nome != null && !nome.isEmpty()) {
             String adjetivo;
 
-            if (filter.equals(StaticFilter.PRATO_MASSA)) {
-                adjetivo = JOptionPane.showInputDialog(frame, nome + StaticFilter.COMPLETE_ADJETIVO_LASANHA, StaticFilter.COMPLETE, JOptionPane.QUESTION_MESSAGE);
+            if (Objects.equals(tipoRefeicao, REFEICAO_E_MASSA)) {
+                adjetivo = dialogAdicionarAdjetivoARefeicao(nome, COMPLETE_ADJETIVO_REFEICAO_PRINCIPAL);
             } else {
-                adjetivo = JOptionPane.showInputDialog(frame, nome + StaticFilter.COMPLETE_ADJETIVO_BOLO, StaticFilter.COMPLETE, JOptionPane.QUESTION_MESSAGE);
+                adjetivo = dialogAdicionarAdjetivoARefeicao(nome, COMPLETE_ADJETIVO_SOBREMESSA);
             }
-
-            pratos.add(new Prato(nome, adjetivo));
+            refeicaos.add(new Refeicao(nome, adjetivo));
         } else {
-            JOptionPane.showConfirmDialog(frame, StaticFilter.CAMPO_VAZIO, StaticFilter.JOGO_GOURMET, JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null);
+            dialogCampoVazio();
+        }
+    }
+
+    private static void acerteiDeNovo() {
+        int resposta = dialogAcerteiDeNovo();
+
+        fecharPrograma(resposta);
+    }
+
+    private static void fecharPrograma(int resposta) {
+        if (resposta == YES_OPTION) {
+            System.exit(0);
         }
     }
 }

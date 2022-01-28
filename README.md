@@ -1,3 +1,3 @@
 # jogo-ia
 
-Jogo de inteligencia artificial para sugerir pratos 
+Jogo de inteligencia artificial para adivinhar refeicoes 
