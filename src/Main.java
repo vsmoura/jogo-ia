@@ -1,8 +1,9 @@
 import entity.Refeicao;
-import service.ProgramService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static service.ProgramService.program;
 
 public class Main {
 
@@ -11,8 +12,8 @@ public class Main {
         List<Refeicao> refeicaoPrincipal = new ArrayList<>();
         List<Refeicao> sobremessa = new ArrayList<>();
 
-        for (int i = 0; i <= 0; i--) {
-            ProgramService.program(refeicaoPrincipal, sobremessa);
+        while (true) {
+            program(refeicaoPrincipal, sobremessa);
         }
     }
 }
