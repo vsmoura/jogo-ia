@@ -55,9 +55,9 @@ public class DialogService {
         );
     }
 
-    public static int dialogAcerteiARefeicaoComONome(Refeicao listaPratos) {
+    public static int dialogAcerteiARefeicaoComONome(Refeicao refeicao) {
         return showOptionDialog(frame,
-                PRATO_QUE_PENSOU + listaPratos.getNome(),
+                PRATO_QUE_PENSOU + refeicao.getNome(),
                 CONFIRMA, YES_NO_OPTION,
                 QUESTION_MESSAGE,
                 null,
@@ -66,9 +66,9 @@ public class DialogService {
         );
     }
 
-    public static int dialogAcerteiARefeicaoComOAdjetivo(Refeicao listaPratos) {
+    public static int dialogAcerteiARefeicaoComOAdjetivo(Refeicao refeicao) {
         return showOptionDialog(frame,
-                PRATO_QUE_PENSOU + listaPratos.getAdjetivo(),
+                PRATO_QUE_PENSOU + refeicao.getAdjetivo(),
                 CONFIRMA, YES_NO_OPTION, QUESTION_MESSAGE,
                 null, opcaoSimOuNao,
                 opcaoSimOuNao[0]
