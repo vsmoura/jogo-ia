@@ -10,7 +10,7 @@ public class StaticFilter {
     public static final String QUAL_PRATO_QUE_VOCE_PENSOU = "<html><body><p width='200px'>Qual o prato que você pensou?</p></body></html>";
     public static final String PENSE_NO_PRATO_QUE_GOSTA = "<html><body><p width='200px' align='center'>Pense no prato que gosta</p></body></html>";
     public static final String PRATO_QUE_PENSOU = "O prato que você pensou é ";
-    public static final String REFEICAO_E_MASSA = "<html><body><p align='center'>O Refeicao que você pensou é massa?</p></body></html>";
+    public static final String REFEICAO_E_MASSA = "<html><body><p align='center'>A Refeicao que você pensou é massa?</p></body></html>";
     public static final String REFEICAO_LASANHA = "<html><body><p align='center'>O prato que você pensou é Lasanha?</p></body></html>";
     public static final String REFEICAO_E_BOLO_DE_CHOCOLATE = "<html><body><p align='center'>O prato que você pensou é Bolo de Chocolate?</p></body></html>";
     public static final String COMPLETE_ADJETIVO_SOBREMESSA = " é ______ mas Bolo de Chocolate não.";
